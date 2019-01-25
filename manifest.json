@@ -1,0 +1,29 @@
+{
+    "id" : "5993ea98",
+    "name" : "Masked Image Shadows",
+    "version" : "0.0.1",
+    
+    "description" : "Quickly and easily add drop shadows to masked images.",
+
+    "icons" : [
+        {
+            "path" : "images/icon.png",
+            "width" : 96,
+            "height" : 96
+        }
+    ],
+    
+    "host" : {
+        "app" : "XD",
+        "minVersion" : "13.0.0"
+    },
+    
+    "uiEntryPoints" : [
+        {
+            "type" : "menu",
+            "label" : "Masked Image Shadows",
+            "commandId" : "myPluginCommand",
+            "shortcut": { "mac": "Cmd+Alt+P", "win": "Ctrl+Alt+P" }
+        }
+    ]  
+}
