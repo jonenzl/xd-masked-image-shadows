@@ -4,9 +4,10 @@
  * Visit http://adobexdplatform.com/ for API docs and more sample code.
  */
 
+
 var {Rectangle, Color} = require("scenegraph");
 
-function myPluginCommand(selection) {
+function myCommand(selection) {
     // Go to Plugins > Development > Developer Console to see this log output
     console.log("Plugin command is running!");
 
@@ -20,6 +21,6 @@ function myPluginCommand(selection) {
 
 module.exports = {
     commands: {
-        myPluginCommand: myPluginCommand
+        myCommand: myCommand
     }
 };
