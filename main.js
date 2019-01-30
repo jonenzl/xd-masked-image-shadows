@@ -7,8 +7,8 @@
  * Jonathan Ellis and Aaron Ooi
  */
 
-var {Rectangle, Color, Shadow} = require("scenegraph");
-var commands = require("commands");
+let {Color, Shadow} = require("scenegraph");
+let commands = require("commands");
 
 function createDropShadow(selection) {
     // Go to Plugins > Development > Developer Console to see this log output
@@ -16,7 +16,7 @@ function createDropShadow(selection) {
     
     // Get the currently selected object/s
     let items = selection.items;
-    
+
     //****************************************************************//
     //    Adds drop shadows to multiple selections (does not group)   //
     //****************************************************************//
