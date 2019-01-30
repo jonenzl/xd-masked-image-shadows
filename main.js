@@ -15,19 +15,38 @@ function createDropShadow(selection) {
     console.log("Plugin command is running!");
     
     // Get the currently selected object/s
-    var items = selection.items;
-    var targetNode = items;
-    selection.items = targetNode;
+    let items = selection.items;
     
-    // For each selection - duplicate the object with white fill, no stroke, default drop shadow, and send backward
-    for (var i = 0; i < items.length; i++) {
+    //****************************************************************//
+    //    Adds drop shadows to multiple selections (does not group)   //
+    //****************************************************************//
+    // For each selection - duplicate the initial object
+    // Set initial object fill to white, add default drop shadow, and send backward
+    items.forEach(function(element) {
         commands.duplicate();
-        var clone = selection.items[i];
+        let clone = element;
+        clone.fill = new Color({r:255, g:255, b:255, a:255});
+        clone.shadow = new Shadow(0, 3, 6, new Color({r:0, g:0, b:0, a:40}));
+        selection.items = null;
+    });
+    
+    //*****************************************************************************************//
+    //    Add drop shadow to one selection and group (does not work for multiple selections)   //
+    //*****************************************************************************************//
+    // For each selection - duplicate the initial object
+    // Set initial object fill to white, add default drop shadow, and send backward
+    /*items.forEach(function(element) {
+        let initial = element;
+        commands.duplicate();
+        let clone = selection.items[0];
         clone.fill = new Color({r:255, g:255, b:255, a:255});
         clone.stroke = null;
         clone.shadow = new Shadow(0, 3, 6, new Color({r:0, g:0, b:0, a:40}));
         commands.sendBackward();
-    }
+        selection.items = [initial, clone];
+        commands.group();
+        selection.items = null;
+    });*/
 }
 
 module.exports = {
