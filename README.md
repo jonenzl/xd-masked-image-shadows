@@ -7,7 +7,7 @@ An [Adobe XD](https://www.adobe.com/products/xd.html) plugin to quickly and easi
 3. Click Install
 
 ## How to use this plugin
-1. Select a Mask Group in your document
+1. Select one or many Mask Groups in your document
 2. Click *Plugins > Masked Image Shadows*
 3. Alternatively, use the keyboard shortcut: Cmd+Alt+P (Mac), Ctrl+Alt+P (Win)
 
