@@ -18,7 +18,8 @@ let commands = require("commands");
 * Get selected Mask Group
 * Duplicate original image and mask shape
 * Delete the original image
-* Set duplicated mask shape fill to white, add default drop shadow, and send backward
+* Set duplicated mask shape fill to white, add default drop shadow
+* Send shadow backward and group with original Mask Group
 */
 function createDropShadow(selection) {
     // Go to Plugins > Development > Developer Console to see this log output
@@ -41,9 +42,13 @@ function createDropShadow(selection) {
     shadowBox.fill = new Color({r:255, g:255, b:255, a:255});
     shadowBox.stroke = null;
     shadowBox.shadow = new Shadow(0, 3, 6, new Color({r:0, g:0, b:0, a:40}));
-    
-    // Send the shadow behind the original Mask Group
+
+    // Send the shadow behind the original Mask Group, group together with original Mask Group layer name
     commands.sendBackward();
+    selection.items = [node, shadowBox];
+    commands.group();
+    let newLayerName = selection.items[0];
+    newLayerName.name = node.name;
     
     // Unselect objects
     selection.items = null;
