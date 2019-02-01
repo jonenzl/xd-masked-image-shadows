@@ -62,22 +62,9 @@ function createDropShadow(selection) {
 }
 
 async function showAlert() {
-    const feedback = await confirm("Masked Image Shadows",
-    "Smart filters are nondestructive and will preserve your original images.",
-    ["Cancel", "Create Shadow"]);
-    
-    switch (feedback.which) {
-        case 0:
-            break;
-        case 1:
-            break;
-    }
-}
-
-/*async function showAlert() {
     await alert("Incorrect selection",
-    "In order to function correctly, this plugin requires one or more Mask Groups to be selected.");  
-}*/
+    "In order to function correctly, this plugin requires one or more Mask Groups to be selected. If the Mask Group is within a symbol or grouped with other objects, make sure to select the Mask Group separately.");  
+}
 
 module.exports = {
     commands: {
