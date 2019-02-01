@@ -2,7 +2,7 @@
 * Masked Image Shadows
 * v0.0.2
 *
-* Add a drop shadow to the selected Mask Group.
+* Add a drop shadow to selected Mask Groups.
 *
 * Jonathan Ellis and Aaron Ooi
 *
@@ -42,7 +42,7 @@ function createDropShadow(selection) {
         
         // Edit the duplicated mask shape -- rename "shadow", white fill, no stroke, add default drop shadow
         let shadowBox = selection.items[1]
-        shadowBox.name = "Shadow";
+        shadowBox.name = `${node[i].name}-shadow`;
         shadowBox.fill = new Color({r:255, g:255, b:255, a:255});
         shadowBox.stroke = null;
         shadowBox.shadow = new Shadow(0, 3, 6, new Color({r:0, g:0, b:0, a:40}));
