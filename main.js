@@ -12,7 +12,7 @@
 
 let {Color, Shadow, scenegraph} = require("scenegraph");
 let commands = require("commands");
-const { confirm, alert } = require("./lib/dialogs.js");
+const { alert } = require("./lib/dialogs.js");
 
 /*
 * Get all selected Mask Groups
