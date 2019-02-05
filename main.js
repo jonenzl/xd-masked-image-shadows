@@ -13,7 +13,14 @@
 
 let {Color, Shadow, scenegraph} = require("scenegraph");
 let commands = require("commands");
-const { alert, error } = require("./lib/dialogs.js");
+const { alert, createDialog } = require("./lib/dialogs.js");
+
+const DIALOG_CANCELED = "reasonCancelled";
+
+var colorR = 0;
+var colorG = 0;
+var colorB = 0;
+var colorA = 0;
 
 /*
 * Get all selected Mask Groups
@@ -33,6 +40,14 @@ function createDropShadow(selection) {
         alert("Incorrect selection", "In order to function correctly, this plugin works when only Mask Groups have been selected. If the Mask Group is within a symbol or grouped with other objects, make sure to select the Mask Group separately.");
         return;
     }
+    
+    /*await createDialog({
+        title: "Mask Group Drop Shadow"
+    })*/
+    
+    showSettings().then(function() {
+        
+    });
     
     for (let i = 0; i < node.length; i++) {
         // Select each Mask Group node
@@ -61,6 +76,95 @@ function createDropShadow(selection) {
     
     // Reset selection in the document to the user's initial selection before plugin execution
     selection.items = initialSelection;
+
+    /*createDialog({
+        title: 'SVG Output'
+    })*/
+}
+
+function showOnboarding() {
+    var dialog = document.createElement("dialog");
+    dialog.innerHTML = `
+        <form method="dialog">
+            <h1>Mask Group Shadows</h1>
+            <hr>
+            <ul>
+                <li>• Select...</li>
+                <li>• Select...</li>
+            </ul>
+            <footer>
+                <button id="ok" type="submit" uxp-variant="cta">OK</button>
+            </footer>
+        </form>`;
+    document.appendChild(dialog);
+
+    return dialog.showModal().then(function () {
+        dialog.remove();
+    });
+}
+
+function showSettings() {
+    var dialog = document.createElement("dialog");
+    dialog.innerHTML = `
+        <style>
+        .row {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        hr {
+            margin-bottom: 20px;
+        }
+
+        .option-section {
+            margin: 20px 6px;
+        }
+        </style>
+        <form method="dialog">
+            <h1>Mask Group Shadows</h1>
+            <hr>
+            <p>Select options for the drop shadow.</p>
+            <h2 class="option-section">Color</h3>
+            <div class="row">
+                <div class="col">
+                    <label>R:</label>
+                    <input type="number" uxp-quiet="true" id="numSteps" min="0" max="255" value="${colorR}" />
+                </div>
+                <div class="col">
+                    <label>G:</label>
+                    <input type="number" uxp-quiet="true" id="numSteps" min="0" max="255" value="${colorG}" />
+                </div>
+                <div class="col">
+                    <label>B:</label>
+                    <input type="number" uxp-quiet="true" id="numSteps" min="0" max="255" value="${colorB}" />
+                </div>
+                <div class="col">
+                    <label>A:</label>
+                    <input type="number" uxp-quiet="true" id="numSteps" min="0" max="255" value="${colorA}" />
+                </div>
+            </div>
+            <footer>
+                <button id="cancel" type="reset" uxp-variant="primary">Cancel</button>
+                <button id="ok" type="submit" uxp-variant="cta">OK</button>
+            </footer>
+        </form>`;
+    document.appendChild(dialog);
+
+    // Ok button & Enter key automatically 'submit' the form
+    // Esc key automatically cancels
+    // Cancel button has no default behavior
+    document.getElementById("cancel").onclick = () => dialog.close(DIALOG_CANCELED);
+
+    return dialog.showModal().then(function (reason) {
+        dialog.remove();
+
+        if (reason === DIALOG_CANCELED) {
+            return null;
+        } else {
+            return parseInt(dialog.querySelector("#numSteps").value);
+        }
+    });
 }
 
 module.exports = {
