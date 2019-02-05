@@ -29,11 +29,6 @@
                     "type": "menu",
                     "label": "Run",
                     "commandId": "createDropShadow"
-                },
-                {
-                    "type": "menu",
-                    "label": "Show alert",
-                    "commandId": "showAlert"
                 }
             ]
         }
