@@ -17,10 +17,13 @@ const { alert, createDialog } = require("./lib/dialogs.js");
 
 const DIALOG_CANCELED = "reasonCancelled";
 
-var colorR = 0;
-var colorG = 0;
-var colorB = 0;
-var colorA = 0;
+let colorR = 0;
+let colorG = 0;
+let colorB = 0;
+let colorA = 0.16;
+let positionX = 0;
+let positionY = 3;
+let blur = 6;
 
 /*
 * Get all selected Mask Groups
@@ -63,12 +66,21 @@ function createDropShadow(selection) {
         console.log(unusedImage);
         unusedImage.removeFromParent();
         
-        // Edit the duplicated mask shape -- rename new shadow layer, white fill, no stroke, add default drop shadow
+        // Edit the duplicated mask shape -- rename new shadow layer, white fill, no stroke
         let shadowBox = selection.items[1]
         shadowBox.name = `${node[i].name}-shadow`;
         shadowBox.fill = new Color({r:255, g:255, b:255, a:255});
         shadowBox.stroke = null;
-        shadowBox.shadow = new Shadow(0, 3, 6, new Color({r:0, g:0, b:0, a:40}));
+        
+        // Add the drop shadow using values chosen by user
+        let userRValue = 0; // hardcode for now
+        let userGValue = 0;
+        let userBValue = 0;
+        let userAValue = 0.16;
+        let shadowColor = new Color({r:userRValue, g:userGValue, b:userBValue, a:(userAValue * 255)});
+        /*let shadowColor = new Color({r:0, g:0, b:0, a:40});*/
+        shadowColor.toRgba();
+        shadowBox.shadow = new Shadow(0, 3, 6, shadowColor);
         
         // Send the shadow behind the original Mask Group
         commands.sendBackward();
@@ -80,6 +92,119 @@ function createDropShadow(selection) {
     /*createDialog({
         title: 'SVG Output'
     })*/
+}
+
+function showSettings() {
+    var dialog = document.createElement("dialog");
+    dialog.innerHTML = `
+        <style>
+            .h1 {
+                align-items: center;
+                justify-content: space-between;
+                display: flex;
+                flex-direction: row;
+            }
+
+            .icon {
+                width: 32px;
+                height: 32px;
+                overflow: hidden;
+            }
+
+            .intro-text {
+                margin: 32px 0 20px 6px;
+            }
+
+            .row {
+                display: flex;
+                align-items: center;
+                margin: 8px 0 20px 0;
+            }
+
+            .plugin-logo {
+                width: 32px;
+                height: 32px;
+                display: inline;
+            }
+
+        </style>
+        <form method="dialog">
+            <h1 class="h1">
+                <span>Mask Group Shadows</span>
+                <img class="icon" src="images/icon.png" />
+            </h1>
+            <hr>
+            <p class="intro-text">Select options for the drop shadow.</p>
+            <h2>Color</h2>
+            <div class="row">
+                <div class="col">
+                    <label>
+                        <span>R Value (0-255):</span>
+                        <input type="number" id="colorRInput" min="0" max="255" value="${colorR}" />
+                    </label>
+                </div>
+                <div class="col">
+                    <label>
+                        <span>G Value (0-255):</span>
+                    <input type="number" id="colorGInput" min="0" max="255" value="${colorG}" />
+                    </label>
+                </div>
+                <div class="col">
+                    <label>
+                        <span>B Value (0-255):</span>
+                        <input type="number" id="colorBInput" min="0" max="255" value="${colorB}" />
+                    </label>
+                </div>
+                <div class="col">
+                    <label>
+                        <span>A Value (0.0-1.0):</span>
+                        <input type="number" id="colorAInput" min="0" max="1" value="${colorA}" />
+                    </label>
+                </div>
+            </div>
+            <h2>Shadow Properties</h2>
+            <div class="row">
+                <div class="col">
+                    <label>
+                        <span>X Position:</span>
+                        <input type="number" id="positionXInput" value="${positionX}" />
+                    </label>
+                </div>
+                <div class="col">
+                    <label>
+                        <span>Y Position:</span>
+                        <input type="number" id="positionYInput" value="${positionY}" />
+                    </label>
+                </div>
+                <div class="col">
+                    <label>
+                        <span>Blur:</span>
+                        <input type="number" id="blurInput" value="${blur}" />
+                    </label>                   
+                </div>
+            </div>
+            <footer>
+                <button id="cancel" type="reset" uxp-variant="secondary">Cancel</button>
+                <button id="ok" type="submit" uxp-variant="cta">Create Drop Shadow</button>
+            </footer>
+        </form>`;
+    
+    document.appendChild(dialog);
+
+    // Ok button & Enter key automatically 'submit' the form
+    // Esc key automatically cancels
+    // Cancel button has no default behavior
+    document.getElementById("cancel").onclick = () => dialog.close(DIALOG_CANCELED);
+
+    return dialog.showModal().then(function (reason) {
+        dialog.remove();
+
+        if (reason === DIALOG_CANCELED) {
+            return null;
+        } else {
+            return parseInt(dialog.querySelector("#colorRInput").value);
+        }
+    });
 }
 
 function showOnboarding() {
@@ -103,69 +228,6 @@ function showOnboarding() {
     });
 }
 
-function showSettings() {
-    var dialog = document.createElement("dialog");
-    dialog.innerHTML = `
-        <style>
-        .row {
-            display: flex;
-            align-items: center;
-            margin-top: 10px;
-        }
-
-        hr {
-            margin-bottom: 20px;
-        }
-
-        .option-section {
-            margin: 20px 6px;
-        }
-        </style>
-        <form method="dialog">
-            <h1>Mask Group Shadows</h1>
-            <hr>
-            <p>Select options for the drop shadow.</p>
-            <h2 class="option-section">Color</h3>
-            <div class="row">
-                <div class="col">
-                    <label>R:</label>
-                    <input type="number" uxp-quiet="true" id="numSteps" min="0" max="255" value="${colorR}" />
-                </div>
-                <div class="col">
-                    <label>G:</label>
-                    <input type="number" uxp-quiet="true" id="numSteps" min="0" max="255" value="${colorG}" />
-                </div>
-                <div class="col">
-                    <label>B:</label>
-                    <input type="number" uxp-quiet="true" id="numSteps" min="0" max="255" value="${colorB}" />
-                </div>
-                <div class="col">
-                    <label>A:</label>
-                    <input type="number" uxp-quiet="true" id="numSteps" min="0" max="255" value="${colorA}" />
-                </div>
-            </div>
-            <footer>
-                <button id="cancel" type="reset" uxp-variant="primary">Cancel</button>
-                <button id="ok" type="submit" uxp-variant="cta">OK</button>
-            </footer>
-        </form>`;
-    document.appendChild(dialog);
-
-    // Ok button & Enter key automatically 'submit' the form
-    // Esc key automatically cancels
-    // Cancel button has no default behavior
-    document.getElementById("cancel").onclick = () => dialog.close(DIALOG_CANCELED);
-
-    return dialog.showModal().then(function (reason) {
-        dialog.remove();
-
-        if (reason === DIALOG_CANCELED) {
-            return null;
-        } else {
-            return parseInt(dialog.querySelector("#numSteps").value);
-        }
-    });
-}
 
 module.exports = {
     commands: {
