@@ -43,14 +43,24 @@ function createDropShadow(selection) {
         return;
     }
     
-    /*await createDialog({
-        title: "Mask Group Drop Shadow"
-    })*/
+    showSettings();
     
-    showSettings().then(function() {
-        
-    });
-    
+    // close and cancel
+	let trigger = document.querySelector("#ok");
+	trigger.addEventListener("click", closeDialog);
+	
+    async function closeDialog() {
+		console.log("ran function");
+		dialog.close("addedShadows");
+	}
+
+	let cancelTrigger = document.querySelector("#cancel");
+	cancelTrigger.addEventListener("click", cancel);
+	
+    async function cancel() {
+        console.log("cancelled");
+		dialog.close("cancel");
+    }
     
     for (let i = 0; i < node.length; i++) {
         // Select each Mask Group node
@@ -87,10 +97,6 @@ function createDropShadow(selection) {
     
     // Reset selection in the document to the user's initial selection before plugin execution
     selection.items = initialSelection;
-
-    /*createDialog({
-        title: 'SVG Output'
-    })*/
 }
 
 function showSettings() {
@@ -195,7 +201,7 @@ function showSettings() {
     // Cancel button has no default behavior
     document.getElementById("cancel").onclick = () => dialog.close(DIALOG_CANCELED);
 
-    return dialog.showModal().then(function (reason) {
+    return dialog.showModal().then(function(reason) {
         dialog.remove();
 
         if (reason === DIALOG_CANCELED) {
