@@ -23,12 +23,12 @@
             "type" : "menu",
             "label" : "Masked Image Shadows",
             "commandId" : "createDropShadow",
-            "shortcut": { "mac": "Cmd+Alt+P", "win": "Ctrl+Alt+P" },
             "menuItems": [
                 {
                     "type": "menu",
                     "label": "Run",
-                    "commandId": "createDropShadow"
+                    "commandId": "createDropShadow",
+                    "shortcut": { "mac": "Cmd+Alt+P", "win": "Ctrl+Alt+P" }
                 }
             ]
         }
