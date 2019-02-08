@@ -36,7 +36,6 @@ function createDropShadow(selection) {
     // Access selected Mask Group/s, record user's initial selection
     let initialSelection = selection.items.map(i => i)
     let node = selection.items;
-    console.log(node);
     
     // If there is no current selection, send an alert modal
     if (!selection.hasArtwork) {
@@ -52,6 +51,7 @@ function createDropShadow(selection) {
         
     });
     
+    
     for (let i = 0; i < node.length; i++) {
         // Select each Mask Group node
         selection.items = node[i];
@@ -63,7 +63,6 @@ function createDropShadow(selection) {
         
         // Delete the duplicated image
         let unusedImage = selection.items[0]
-        console.log(unusedImage);
         unusedImage.removeFromParent();
         
         // Edit the duplicated mask shape -- rename new shadow layer, white fill, no stroke
@@ -78,7 +77,7 @@ function createDropShadow(selection) {
         let userBValue = 0;
         let userAValue = 0.16;
         let shadowColor = new Color({r:userRValue, g:userGValue, b:userBValue, a:(userAValue * 255)});
-        /*let shadowColor = new Color({r:0, g:0, b:0, a:40});*/
+        //let shadowColor = new Color({r:0, g:0, b:0, a:40});
         shadowColor.toRgba();
         shadowBox.shadow = new Shadow(0, 3, 6, shadowColor);
         
