@@ -41,12 +41,24 @@ function createDropShadow(selection) {
     if (!selection.hasArtwork) {
         alert("Incorrect selection", "In order to function correctly, this plugin works when only Mask Groups have been selected. If the Mask Group is within a symbol or grouped with other objects, make sure to select the Mask Group separately.");
         return;
+    } else {
+        // Reset settings to defaults
+        colorR = 0;
+        colorG = 0;
+        colorB = 0;
+        colorA = 0.16;
+        positionX = 0;
+        positionY = 3;
+        blur = 6;
+        
+        return showSettings().then(function(rInput) {
+            colorR = rInput;
+            createShadows(selection, colorR, colorG, colorB, colorA, positionX, positionY, blur);
+        });
     }
     
-    showSettings();
-    
     // close and cancel
-	let trigger = document.querySelector("#ok");
+	/*let trigger = document.querySelector("#ok");
 	trigger.addEventListener("click", closeDialog);
 	
     async function closeDialog() {
@@ -60,8 +72,14 @@ function createDropShadow(selection) {
     async function cancel() {
         console.log("cancelled");
 		dialog.close("cancel");
-    }
+    }*/
     
+    // Reset selection in the document to the user's initial selection before plugin execution
+    selection.items = initialSelection;
+}
+
+function createShadows(selection, colorR, colorG, colorB, colorA, positionX, positionY, blur) {
+    let node = selection.items;
     for (let i = 0; i < node.length; i++) {
         // Select each Mask Group node
         selection.items = node[i];
@@ -82,21 +100,20 @@ function createDropShadow(selection) {
         shadowBox.stroke = null;
         
         // Add the drop shadow using values chosen by user
-        let userRValue = 0; // hardcode for now
-        let userGValue = 0;
-        let userBValue = 0;
-        let userAValue = 0.16;
+        let userRValue = colorR;
+        let userGValue = colorG;
+        let userBValue = colorB;
+        let userAValue = 0.16; // hardcode for now
+        let userPosX = 0;
+        let userPosY = 3;
+        let userBlur = 6;
         let shadowColor = new Color({r:userRValue, g:userGValue, b:userBValue, a:(userAValue * 255)});
-        //let shadowColor = new Color({r:0, g:0, b:0, a:40});
         shadowColor.toRgba();
-        shadowBox.shadow = new Shadow(0, 3, 6, shadowColor);
+        shadowBox.shadow = new Shadow(userPosX, userPosY, userBlur, shadowColor);
         
         // Send the shadow behind the original Mask Group
         commands.sendBackward();
     }
-    
-    // Reset selection in the document to the user's initial selection before plugin execution
-    selection.items = initialSelection;
 }
 
 function showSettings() {
