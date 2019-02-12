@@ -17,6 +17,7 @@ const { alert, createDialog } = require("./lib/dialogs.js");
 
 const DIALOG_CANCELED = "reasonCancelled";
 
+// Initialise settings
 let colorR = 0;
 let colorG = 0;
 let colorB = 0;
@@ -51,8 +52,14 @@ function createDropShadow(selection) {
         positionY = 3;
         blur = 6;
         
-        return showSettings().then(function(rInput) {
-            colorR = rInput;
+        return showSettings().then(function(properties) {
+            colorR = properties[0];
+            colorG = properties[1];
+            colorB = properties[2];
+            colorA = properties[3];
+            positionX = properties[4];
+            positionY = properties[5];
+            blur = properties[6];
             createShadows(selection, colorR, colorG, colorB, colorA, positionX, positionY, blur);
         });
     }
@@ -103,10 +110,10 @@ function createShadows(selection, colorR, colorG, colorB, colorA, positionX, pos
         let userRValue = colorR;
         let userGValue = colorG;
         let userBValue = colorB;
-        let userAValue = 0.16; // hardcode for now
-        let userPosX = 0;
-        let userPosY = 3;
-        let userBlur = 6;
+        let userAValue = colorA;
+        let userPosX = positionX;
+        let userPosY = positionY;
+        let userBlur = blur;
         let shadowColor = new Color({r:userRValue, g:userGValue, b:userBValue, a:(userAValue * 255)});
         shadowColor.toRgba();
         shadowBox.shadow = new Shadow(userPosX, userPosY, userBlur, shadowColor);
@@ -224,7 +231,8 @@ function showSettings() {
         if (reason === DIALOG_CANCELED) {
             return null;
         } else {
-            return parseInt(dialog.querySelector("#colorRInput").value);
+            // Return the values of the input boxes
+            return [parseInt(dialog.querySelector("#colorRInput").value), parseInt(dialog.querySelector("#colorGInput").value), parseInt(dialog.querySelector("#colorBInput").value), parseFloat(dialog.querySelector("#colorAInput").value), parseInt(dialog.querySelector("#positionXInput").value), parseInt(dialog.querySelector("#positionYInput").value), parseInt(dialog.querySelector("#blurInput").value)];
         }
     });
 }
