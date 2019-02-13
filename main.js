@@ -11,9 +11,9 @@
 * Distributed under the MIT license. See LICENSE file for details.
 */
 
-let {Color, Shadow, scenegraph} = require("scenegraph");
-let commands = require("commands");
+const { Color, Shadow, scenegraph } = require("scenegraph");
 const { alert, createDialog } = require("./lib/dialogs.js");
+let commands = require("commands");
 
 const DIALOG_CANCELED = "reasonCancelled";
 
@@ -39,6 +39,7 @@ function createDropShadow(selection) {
         alert("Incorrect selection", "In order to function correctly, this plugin works when only Mask Groups have been selected. If the Mask Group is within a symbol or grouped with other objects, make sure to select the Mask Group separately.");
         return;
     } else {
+        // Run the createShadows() function using previous settings
         createShadows(selection, colorR, colorG, colorB, colorA, positionX, positionY, blur);
     }
     
