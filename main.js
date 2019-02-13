@@ -1,6 +1,6 @@
 /*
 * Masked Image Shadows
-* v0.0.2
+* v0.0.3
 *
 * Add a drop shadow to selected Mask Groups.
 * The plugin will create a shape layer below the mask group with a shadow applied.
@@ -27,13 +27,30 @@ let positionY = 3;
 let blur = 6;
 
 /*
-* Get all selected Mask Groups
-* For each Mask Group:
-* Duplicate original image and mask shape
-* Delete the original image
-* Set duplicated mask shape fill to white, add default drop shadow, and send backward
+* Execute the createShadows() function using the previous settings
 */
 function createDropShadow(selection) {
+    // Access selected Mask Group/s, record user's initial selection
+    let initialSelection = selection.items.map(i => i)
+    let node = selection.items;
+    
+    // If there is no current selection, send an alert modal
+    if (!selection.hasArtwork) {
+        alert("Incorrect selection", "In order to function correctly, this plugin works when only Mask Groups have been selected. If the Mask Group is within a symbol or grouped with other objects, make sure to select the Mask Group separately.");
+        return;
+    } else {
+        createShadows(selection, colorR, colorG, colorB, colorA, positionX, positionY, blur);
+    }
+    
+    // Reset selection in the document to the user's initial selection before plugin execution
+    selection.items = initialSelection;
+}
+
+/*
+* Show the dialog modal and get user's settings
+* Execute the createShadows() function using the chosen settings
+*/
+function createDropShadowSetup(selection) {
     // Access selected Mask Group/s, record user's initial selection
     let initialSelection = selection.items.map(i => i)
     let node = selection.items;
@@ -52,7 +69,9 @@ function createDropShadow(selection) {
         positionY = 3;
         blur = 6;
         
+        // Show the settings modal dialog
         return showSettings().then(function(properties) {
+            // Retrieve input values for shadow properties
             colorR = properties[0];
             colorG = properties[1];
             colorB = properties[2];
@@ -60,31 +79,23 @@ function createDropShadow(selection) {
             positionX = properties[4];
             positionY = properties[5];
             blur = properties[6];
+            
+            // Run the createShadows() function with specified properties
             createShadows(selection, colorR, colorG, colorB, colorA, positionX, positionY, blur);
         });
     }
-    
-    // close and cancel
-	/*let trigger = document.querySelector("#ok");
-	trigger.addEventListener("click", closeDialog);
-	
-    async function closeDialog() {
-		console.log("ran function");
-		dialog.close("addedShadows");
-	}
-
-	let cancelTrigger = document.querySelector("#cancel");
-	cancelTrigger.addEventListener("click", cancel);
-	
-    async function cancel() {
-        console.log("cancelled");
-		dialog.close("cancel");
-    }*/
     
     // Reset selection in the document to the user's initial selection before plugin execution
     selection.items = initialSelection;
 }
 
+/*
+* Get all selected Mask Groups
+* For each Mask Group:
+* Duplicate original image and mask shape
+* Delete the original image
+* Set duplicated mask shape fill to white, add default drop shadow, and send backward
+*/
 function createShadows(selection, colorR, colorG, colorB, colorA, positionX, positionY, blur) {
     let node = selection.items;
     for (let i = 0; i < node.length; i++) {
@@ -123,6 +134,9 @@ function createShadows(selection, colorR, colorG, colorB, colorA, positionX, pos
     }
 }
 
+/*
+* Create a dialog modal for user to choose settings for drop shadow
+*/
 function showSettings() {
     var dialog = document.createElement("dialog");
     dialog.innerHTML = `
@@ -237,7 +251,7 @@ function showSettings() {
     });
 }
 
-function showOnboarding() {
+/*function showOnboarding() {
     var dialog = document.createElement("dialog");
     dialog.innerHTML = `
         <form method="dialog">
@@ -256,11 +270,11 @@ function showOnboarding() {
     return dialog.showModal().then(function () {
         dialog.remove();
     });
-}
-
+}*/
 
 module.exports = {
     commands: {
-        createDropShadow: createDropShadow
+        createDropShadow: createDropShadow,
+        createDropShadowSetup: createDropShadowSetup
     }
 };
