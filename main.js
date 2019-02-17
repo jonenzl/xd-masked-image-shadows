@@ -1,6 +1,6 @@
 /*
 * Masked Image Shadows
-* v0.0.3
+* v0.0.5
 *
 * Add a drop shadow to selected Mask Groups.
 * The plugin will create a shape layer below the mask group with a shadow applied.
