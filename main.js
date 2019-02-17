@@ -6,7 +6,7 @@
 * The plugin will create a shape layer below the mask group with a shadow applied.
 * The name of the new shadow layer will be the that of the original mask group with "-shadow" appended.
 *
-* Jonathan Ellis and Aaron Ooi
+* Jonathan Ellis
 *
 * Distributed under the MIT license. See LICENSE file for details.
 */
@@ -15,7 +15,7 @@ const { Color, Shadow, scenegraph } = require("scenegraph");
 const { alert, createDialog } = require("./lib/dialogs.js");
 let commands = require("commands");
 
-const DIALOG_CANCELED = "reasonCancelled";
+const DIALOG_CANCELLED = "reasonCancelled";
 
 // Initialise settings
 let colorR = 0;
@@ -72,17 +72,19 @@ function createDropShadowSetup(selection) {
         
         // Show the settings modal dialog
         return showSettings().then(function(properties) {
-            // Retrieve input values for shadow properties
-            colorR = properties[0];
-            colorG = properties[1];
-            colorB = properties[2];
-            colorA = properties[3];
-            positionX = properties[4];
-            positionY = properties[5];
-            blur = properties[6];
-            
-            // Run the createShadows() function with specified properties
-            createShadows(selection, colorR, colorG, colorB, colorA, positionX, positionY, blur);
+            if (properties) {
+                // Retrieve input values for shadow properties
+                colorR = properties[0];
+                colorG = properties[1];
+                colorB = properties[2];
+                colorA = properties[3];
+                positionX = properties[4];
+                positionY = properties[5];
+                blur = properties[6];
+
+                // Run the createShadows() function with specified properties
+                createShadows(selection, colorR, colorG, colorB, colorA, positionX, positionY, blur);
+            } // else dialog was canceled or input wasn't a number
         });
     }
     
@@ -236,14 +238,19 @@ function showSettings() {
     document.appendChild(dialog);
 
     // Ok button & Enter key automatically 'submit' the form
-    // Esc key automatically cancels
     // Cancel button has no default behavior
-    document.getElementById("cancel").onclick = () => dialog.close(DIALOG_CANCELED);
+    // Esc key automatically cancels
+    document.getElementById("cancel").onclick = () => dialog.close(DIALOG_CANCELLED);
+    document.addEventListener('keydown', (e) => {
+        if (e.keyCode === 27) {
+            dialog.close(DIALOG_CANCELLED);
+        }
+    });
 
     return dialog.showModal().then(function(reason) {
         dialog.remove();
 
-        if (reason === DIALOG_CANCELED) {
+        if (reason === DIALOG_CANCELLED) {
             return null;
         } else {
             // Return the values of the input boxes
@@ -251,27 +258,6 @@ function showSettings() {
         }
     });
 }
-
-/*function showOnboarding() {
-    var dialog = document.createElement("dialog");
-    dialog.innerHTML = `
-        <form method="dialog">
-            <h1>Mask Group Shadows</h1>
-            <hr>
-            <ul>
-                <li>• Select...</li>
-                <li>• Select...</li>
-            </ul>
-            <footer>
-                <button id="ok" type="submit" uxp-variant="cta">OK</button>
-            </footer>
-        </form>`;
-    document.appendChild(dialog);
-
-    return dialog.showModal().then(function () {
-        dialog.remove();
-    });
-}*/
 
 module.exports = {
     commands: {
