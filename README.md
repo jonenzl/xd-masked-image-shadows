@@ -5,6 +5,7 @@ An [Adobe XD](https://www.adobe.com/products/xd.html) plugin to quickly and easi
 1. Launch Adobe XD and go to *Plugins > Discover Plugins*
 2. Search for "Masked Image Shadows"
 3. Click Install
+4. Alternatively, use this [deep link](https://xd.adobelanding.com/en/xd-plugin-download/?name=5993ea98) to open and install in the Adobe XD Plugin Manager
 
 ## How to use this plugin
 1. Select one or more Mask Groups in your document (currently the plugin only works when Mask Groups are selected without other objects included)
