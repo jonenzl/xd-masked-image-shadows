@@ -176,7 +176,7 @@ function showSettings() {
         </style>
         <form method="dialog">
             <h1 class="h1">
-                <span>Mask Group Shadows</span>
+                <span>Masked Image Shadows</span>
                 <img class="icon" src="images/icon.png" />
             </h1>
             <hr>
