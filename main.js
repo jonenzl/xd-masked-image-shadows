@@ -1,6 +1,6 @@
 /*
 * Masked Image Shadows
-* v0.0.5
+* v0.0.6
 *
 * Add a drop shadow to selected Mask Groups.
 * The plugin will create a shape layer below the mask group with a shadow applied.
@@ -118,7 +118,9 @@ function createShadows(selection, colorR, colorG, colorB, colorA, positionX, pos
         let shadowBox = selection.items[1]
         shadowBox.name = `${node[i].name}-shadow`;
         shadowBox.fill = new Color({r:255, g:255, b:255, a:255});
+        shadowBox.fillEnabled = true;
         shadowBox.stroke = null;
+        shadowBox.strokeEnabled = false;
         
         // Add the drop shadow using values chosen by user
         let userRValue = colorR;
