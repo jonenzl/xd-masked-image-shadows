@@ -16,7 +16,7 @@ An [Adobe XD](https://www.adobe.com/products/xd.html) plugin to quickly and easi
 ### Watch the plugin in action:
 
 <a href="https://www.youtube.com/watch?v=XL8noHWHWYE" target="_blank"><img src="https://github.com/jonenzl/xd-masked-image-shadows/blob/master/images/video-still.png" 
-alt="IMAGE ALT TEXT HERE" /></a>
+alt="Video of Masked Image Shadows plugin" /></a>
 
 ---
 
