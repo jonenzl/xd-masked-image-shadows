@@ -18,6 +18,10 @@ An [Adobe XD](https://www.adobe.com/products/xd.html) plugin to quickly and easi
 <a href="https://www.youtube.com/watch?v=XL8noHWHWYE" target="_blank"><img src="https://github.com/jonenzl/xd-masked-image-shadows/blob/master/images/video-still.png" 
 alt="Video of Masked Image Shadows plugin" /></a>
 
+
+## Read the Case Study
+If you are interested to read the case study about designing and building this plugin, you can find it [here](https://www.jonathanellis.co.nz/work/developing-a-plugin/) on my website.
+
 ---
 
 If you have any problems, please report an issue at [https://github.com/jonenzl/xd-masked-image-shadows/issues](https://github.com/jonenzl/xd-masked-image-shadows/issues).
